@@ -19,3 +19,7 @@ workflows:
           xcodebuild -exportArchive -archivePath $PWD/build/Unity-iPhone.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
     artifacts:
       - build/*.ipa
+- name: Build Xcode Project
+        script: |
+          xcodebuild archive -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone" -sdk iphoneos -archivePath $PWD/build/Unity-iPhone.xcarchive CODE_SIGNING_ALLOWED=NO
+          xcodebuild -exportArchive -archivePath $PWD/build/Unity-iPhone.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
