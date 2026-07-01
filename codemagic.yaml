@@ -5,6 +5,9 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 120
 
+    integrations:
+      app_store_connect: CodemagicKey
+
     environment:
       xcode: latest
 
@@ -16,23 +19,10 @@ workflows:
         XCODE_PROJECT: Unity-iPhone.xcodeproj
         XCODE_SCHEME: Unity-iPhone
 
-    triggering:
-      events:
-        - push
-
-      branch_patterns:
-        - pattern: main
-          include: true
-           
-
     scripts:
-      - name: Show Xcode version
+      - name: Show Xcode Version
         script: |
           xcodebuild -version
-
-      - name: List project schemes
-        script: |
-          xcodebuild -list -project "$XCODE_PROJECT"
 
       - name: Build IPA
         script: |
