@@ -1,17 +1,15 @@
-workflows:
-  ios-unity-build:
-    name: iOS Unity Build
-    instance_type: mac_mini_m2
-    max_build_duration: 60
-    environment:
-      xcode: latest
-    scripts:
-      - name: Build Xcode Project
+- name: Build Xcode Project
         script: |
-          # تنظيف وبناء المشروع
-          xcodebuild clean archive -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone" -sdk iphoneos -archivePath $PWD/build/Unity-iPhone.xcarchive
+          # تنظيف
+          xcodebuild clean -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone"
           
-          # تصدير ملف IPA
-          xcodebuild -exportArchive -archivePath $PWD/build/Unity-iPhone.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
-    artifacts:
-      - build/*.ipa
+          # البناء مع تحديث التوقيع تلقائياً
+          xcodebuild archive -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone" \
+            -sdk iphoneos \
+            -archivePath $PWD/build/Unity-iPhone.xcarchive \
+            -allowProvisioningUpdates
+          
+          # التصدير
+          xcodebuild -exportArchive -archivePath $PWD/build/Unity-iPhone.xcarchive \
+            -exportPath $PWD/build \
+            -exportOptionsPlist exportOptions.plist
