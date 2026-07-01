@@ -2,6 +2,28 @@ workflows:
   ios-unity-build:
     name: iOS Unity Build
     max_build_duration: 60
+    instance_type: mac_mini_m2 # نستخدم m2 لضمان التوافق مع إصدارات Xcode الحديثة
+    environment:
+      xcode: 26  # هنا نقوم بتثبيت الإصدار الذي يظهر في اللوغات الخاصة بك
+    scripts:
+      - name: Install CocoaPods
+        script: |
+          pod install --repo-update
+      - name: Build Xcode Project
+        script: |
+          # تنظيف الـ Build
+          xcodebuild clean -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone"
+          
+          # بناء الـ Archive
+          xcodebuild archive -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone" -sdk iphoneos -archivePath $PWD/build/Unity-iPhone.xcarchive
+          
+          # تصدير الـ IPA
+          xcodebuild -exportArchive -archivePath $PWD/build/Unity-iPhone.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
+    artifacts:
+      - build/*.ipaworkflows:
+  ios-unity-build:
+    name: iOS Unity Build
+    max_build_duration: 60
     instance_type: mac_mini_m1
     scripts:
       - name: Build Xcode Project
