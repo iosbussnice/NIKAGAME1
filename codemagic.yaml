@@ -6,10 +6,10 @@ workflows:
     scripts:
       - name: Build Xcode Project
         script: |
-          # استعمال -project عوض -workspace
-          xcodebuild -project "Wispwood.xcodeproj" -scheme "Wispwood" -sdk iphoneos archive -archivePath $PWD/build/Wispwood.xcarchive
+          # بناء الـ Archive باستخدام الاسم الصحيح للمشروع
+          xcodebuild -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone" -sdk iphoneos archive -archivePath $PWD/build/Unity-iPhone.xcarchive
           
-          # خطوة الـ Export
-          xcodebuild -exportArchive -archivePath $PWD/build/Wispwood.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
+          # تصدير ملف الـ IPA
+          xcodebuild -exportArchive -archivePath $PWD/build/Unity-iPhone.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
     artifacts:
       - build/*.ipa
