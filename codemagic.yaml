@@ -4,21 +4,17 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
-      xcode: 15.4 # يفضل استخدام نسخة مستقرة بدلاً من نسخ البيتا
+      xcode: latest # خلي السيستيم يختار النسخة المتوافقة
     scripts:
       - name: Build Xcode Project
         script: |
-          # 1. Archive
-          xcodebuild archive \
-            -project "Unity-iPhone.xcodeproj" \
-            -scheme "Unity-iPhone" \
-            -sdk iphoneos \
-            -archivePath $PWD/build/Unity-iPhone.xcarchive
-            
-          # 2. Export (مع تحديد المسار الصحيح للملف)
-          xcodebuild -exportArchive \
-            -archivePath $PWD/build/Unity-iPhone.xcarchive \
-            -exportPath $PWD/build \
-            -exportOptionsPlist exportOptions.plist
+          # تنظيف
+          xcodebuild clean -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone"
+          
+          # Archive (بدون توقيع باش نتأكدو بلي الكود هو المشكل)
+          xcodebuild archive -project "Unity-iPhone.xcodeproj" -scheme "Unity-iPhone" -sdk iphoneos -archivePath $PWD/build/Unity-iPhone.xcarchive CODE_SIGNING_ALLOWED=NO
+          
+          # Export
+          xcodebuild -exportArchive -archivePath $PWD/build/Unity-iPhone.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
     artifacts:
       - build/*.ipa
